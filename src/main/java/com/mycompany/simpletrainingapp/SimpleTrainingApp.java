@@ -9,7 +9,6 @@ package com.mycompany.simpletrainingapp;
  * @author papar
  */
 public class SimpleTrainingApp {
-
     public static void main(String[] args) {
         System.out.println("Hello World!");
     }
