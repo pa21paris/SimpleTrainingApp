@@ -18,7 +18,7 @@ public class MuscleGroup {
     
     @Id
     private String name;
-    private Set<Muscle> muscles = new HashSet<>();
+    private final Set<Muscle> muscles = new HashSet<>();
     
     private MuscleGroup(){}
     
@@ -40,6 +40,12 @@ public class MuscleGroup {
     
     public boolean removeMuscle(Muscle muscle){
         return this.muscles.remove(muscle);
+    }
+    
+    public Set<Exercise> getTargetedExercises(){
+        var res = new HashSet<Exercise>();
+        for(Muscle m : this.getMuscles()) res.addAll(m.getTargetedExercises());
+        return res;
     }
     
 }

@@ -19,7 +19,8 @@ public class Muscle {
     @Id
     private String name;
     private MuscleGroup muscleGroup;
-    private Set<Exercise> exercises = new HashSet<>();
+    private final Set<Exercise> targetedExercises = new HashSet<>();
+    private final Set<Exercise> synergistExercises = new HashSet<>();
     
     private Muscle(){}
     
@@ -40,16 +41,35 @@ public class Muscle {
         this.muscleGroup = muscleGroup;
     }
 
-    public Set<Exercise> getExercises() {
-        return Set.copyOf(exercises);
+    public Set<Exercise> getTargetedExercises() {
+        return Set.copyOf(this.targetedExercises);
     }
     
-    public boolean addExercise(Exercise exercise){
-        return this.exercises.add(exercise);
+    public boolean addTargetedExercise(Exercise exercise){
+        return this.targetedExercises.add(exercise);
     }
     
-    public boolean removeExercise(Exercise exercise){
-        return this.exercises.remove(exercise);
+    public boolean removeTargetedExercise(Exercise exercise){
+        return this.targetedExercises.remove(exercise);
+    }
+    
+    public Set<Exercise> getSynergistExercises() {
+        return Set.copyOf(this.synergistExercises);
+    }
+    
+    public boolean addSynergistExercise(Exercise exercise){
+        return this.synergistExercises.add(exercise);
+    }
+    
+    public boolean removeSynergistExercise(Exercise exercise){
+        return this.synergistExercises.remove(exercise);
+    }
+    
+    public Set<Exercise> getAllExercises(){
+        var res = new HashSet<Exercise>();
+        res.addAll(this.getTargetedExercises());
+        res.addAll(this.getSynergistExercises());
+        return res;
     }
     
 }

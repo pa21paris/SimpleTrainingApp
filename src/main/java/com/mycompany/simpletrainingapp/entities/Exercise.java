@@ -26,8 +26,8 @@ public class Exercise {
     private String name;
     private String instructions;
     private String videoLink;
-    private final Set<Exercise> variations = new HashSet<>();
     private Muscle targetMuscle;
+    private final Set<Exercise> variations = new HashSet<>();
     private final Set<Muscle> synergistMuscles = new HashSet<>();
 
     public String getName() {
