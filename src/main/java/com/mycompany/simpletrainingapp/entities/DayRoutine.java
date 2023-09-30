@@ -24,10 +24,11 @@ public class DayRoutine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(unique = true)
+    
+    @Column(unique = true, length = 60)
     private String name;
-
+    
+    
     private Set<RoutineExercise> exercises = new HashSet<>();
 
     public DayRoutine(String name) {
@@ -46,31 +47,34 @@ public class DayRoutine {
         return Set.copyOf(exercises);
     }
 
-    public boolean addExercise(Exercise exercise, RepRange repRange, int weight) {
+    public boolean addExercise(Exercise exercise, RepRange repRange, int weight, int sets) {
         var routineExerciseId = new RoutineExerciseId(this, exercise);
         return this.exercises.add(new RoutineExercise(
                 routineExerciseId,
                 repRange,
-                weight));
+                weight,
+                sets
+        ));
     }
     
     public boolean removeExercise(Exercise exercise){
         return this.exercises.removeIf(e -> e.getExercise() == exercise);
     }
     
-    public boolean modifyExercise(Exercise exercise, RepRange repRange, int weight){
+    public boolean modifyExercise(Exercise exercise, RepRange repRange, int weight, int sets){
         boolean changed = false;
         for(RoutineExercise e : this.exercises){
             if(e.getExercise() == exercise){
                 e.setExpectedRepRange(repRange);
                 e.setExpectedWeight(weight);
+                e.setExpectedSets(sets);
                 changed = true;
             }
         }
         return changed;
     }
     
-    public boolean modifyExercise(Exercise exercise, RepRange repRange){
+    public boolean modifyExerciseReps(Exercise exercise, RepRange repRange){
         boolean changed = false;
         for(RoutineExercise e : this.exercises){
             if(e.getExercise() == exercise){
@@ -81,7 +85,7 @@ public class DayRoutine {
         return changed;
     }
     
-    public boolean modifyExercise(Exercise exercise, int weight){
+    public boolean modifyExerciseWeight(Exercise exercise, int weight){
         boolean changed = false;
         for(RoutineExercise e : this.exercises){
             if(e.getExercise() == exercise){
@@ -92,4 +96,14 @@ public class DayRoutine {
         return changed;
     }
 
+    public boolean modifyExerciseSets(Exercise exercise, int sets){
+        boolean changed = false;
+        for(RoutineExercise e : this.exercises){
+            if(e.getExercise() == exercise){
+                e.setExpectedSets(sets);
+                changed = true;
+            }
+        }
+        return changed;
+    }
 }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.simpletrainingapp.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Entity
 public class MuscleGroup {
     
-    @Id
+    @Id @Column(length = 60)
     private String name;
     private final Set<Muscle> muscles = new HashSet<>();
     

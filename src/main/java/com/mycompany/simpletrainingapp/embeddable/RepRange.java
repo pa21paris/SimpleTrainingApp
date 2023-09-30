@@ -13,14 +13,12 @@ import org.hibernate.annotations.Check;
  * @author papar
  */
 @Embeddable
-@Check(name = "POSITIVE_REPS", constraints = "MINREPS > 0 AND MAXREPS > 0")
-@Check(name = "VALID_REPS", constraints = "MINREPS <= MAXREPS")
+@Check(name = "positiveReps", constraints = "minReps > 0 AND maxReps> 0")
+@Check(name = "validReps", constraints = "minReps <= maxReps")
 public class RepRange {
     
-    @Column(name = "MINREPS")
     private int minReps;
     
-    @Column(name = "MAXREPS")
     private int maxReps;
 
     public RepRange() {}    

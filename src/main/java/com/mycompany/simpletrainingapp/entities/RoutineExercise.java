@@ -8,6 +8,7 @@ import com.mycompany.simpletrainingapp.embeddable.RepRange;
 import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import org.hibernate.annotations.Check;
 
 /**
  *
@@ -19,14 +20,20 @@ public class RoutineExercise {
     @EmbeddedId
     private RoutineExerciseId id;
     private RepRange expectedRepRange;
+    @Check(name = "validExpectedWeight", constraints = "expectedWeight > 0")
     private int expectedWeight;
+    @Check(name = "validExpectedSets", constraints = "expectedSets > 0")
+    private int expectedSets;
 
     public RoutineExercise() {}
 
-    public RoutineExercise(RoutineExerciseId id, RepRange expectedRepRange, int expectedWeight) {
+    public RoutineExercise(
+            RoutineExerciseId id, RepRange expectedRepRange, int expectedWeight, int expectedSets
+    ) {
         this.id = id;
         this.expectedRepRange = expectedRepRange;
         this.expectedWeight = expectedWeight;
+        this.expectedSets = expectedSets;
     }
 
     public DayRoutine getRoutine() {
@@ -52,9 +59,13 @@ public class RoutineExercise {
     public void setExpectedWeight(int expectedWeight) {
         this.expectedWeight = expectedWeight;
     }
-    
-    
-    
-    
+
+    public int getExpectedSets() {
+        return expectedSets;
+    }
+
+    public void setExpectedSets(int expectedSets) {
+        this.expectedSets = expectedSets;
+    }
 
 }

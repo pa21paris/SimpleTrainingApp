@@ -22,7 +22,7 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true)
+    @Column(unique = true, length = 60)
     private String name;
     private String instructions;
     private String videoLink;
