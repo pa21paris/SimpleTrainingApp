@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -50,5 +51,27 @@ public class MuscleGroup {
         for(Muscle m : this.getMuscles()) res.addAll(m.getTargetedExercises());
         return res;
     }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MuscleGroup other = (MuscleGroup) obj;
+        return Objects.equals(this.name, other.name);
+    }
+    
+    
     
 }
