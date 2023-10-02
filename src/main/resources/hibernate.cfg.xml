@@ -6,5 +6,8 @@
         <mapping class="com.mycompany.simpletrainingapp.entities.Exercise" />
         <mapping class="com.mycompany.simpletrainingapp.entities.Muscle" />
         <mapping class="com.mycompany.simpletrainingapp.entities.MuscleGroup" />
+        <mapping class="com.mycompany.simpletrainingapp.entities.SetRecord" />
+        <mapping class="com.mycompany.simpletrainingapp.entities.RoutineExercise" />
+        <mapping class="com.mycompany.simpletrainingapp.entities.DayRoutine" />
     </session-factory>
 </hibernate-configuration>

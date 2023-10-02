@@ -6,9 +6,14 @@ package com.mycompany.simpletrainingapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,9 +31,24 @@ public class Exercise {
     private String name;
     private String instructions;
     private String videoLink;
+    @ManyToOne(fetch = FetchType.LAZY)
     private Muscle targetMuscle;
-    private final Set<Exercise> variations = new HashSet<>();
+    @ManyToMany
     private final Set<Muscle> synergistMuscles = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "ExercisesVariations")
+    private final Set<Exercise> variations = new HashSet<>();
+    @OneToMany(mappedBy = "id.exercise")
+    private final Set<RoutineExercise> routines = new HashSet<>();
+
+    public Exercise() {}    
+
+    public Exercise(String name, String instructions, String videoLink, Muscle targetMuscle) {
+        this.name = name;
+        this.instructions = instructions;
+        this.videoLink = videoLink;
+        this.targetMuscle = targetMuscle;
+    }
 
     public String getName() {
         return name;
@@ -84,6 +104,18 @@ public class Exercise {
     
     public boolean removeSynergistMuscle(Muscle synergistMuscle) {
         return this.synergistMuscles.remove(synergistMuscle);
+    }
+    
+    public Set<RoutineExercise> getRoutines() {
+        return Set.copyOf(routines);
+    }
+
+    public boolean addRoutine(RoutineExercise routine) {
+        return this.routines.add(routine);
+    }
+    
+    public boolean removeRoutine(RoutineExercise routine) {
+        return this.routines.remove(routine);
     }
         
 }

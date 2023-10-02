@@ -4,12 +4,19 @@
 
 package com.mycompany.simpletrainingapp;
 
+import jakarta.persistence.EntityManager;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 /**
  *
  * @author papar
  */
 public class SimpleTrainingApp {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        EntityManager em = sessionFactory.createEntityManager();
+        em.close();
+        sessionFactory.close();
     }
 }

@@ -6,6 +6,8 @@ package com.mycompany.simpletrainingapp.embeddable;
 
 import com.mycompany.simpletrainingapp.entities.RoutineExercise;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import org.hibernate.annotations.Check;
 
@@ -14,19 +16,20 @@ import org.hibernate.annotations.Check;
  * @author papar
  */
 @Embeddable
-@Check(name = "validSetNumber", constraints = "set > 0")
 public class SetRecordId {
     
+    @ManyToOne(fetch = FetchType.LAZY)
     private RoutineExercise routineExercise;
-    private LocalDate date;
-    private int set;
+    private LocalDate setDate;
+    @Check(name = "validSetNumber", constraints = "setNumber > 0")
+    private int setNumber;
 
     public SetRecordId() {}
 
     public SetRecordId(RoutineExercise routineExercise, LocalDate date, int set) {
         this.routineExercise = routineExercise;
-        this.date = date;
-        this.set = set;
+        this.setDate = date;
+        this.setNumber = set;
     }
 
     public RoutineExercise getRoutineExercise() {
@@ -34,11 +37,11 @@ public class SetRecordId {
     }
 
     public LocalDate getDate() {
-        return date;
+        return setDate;
     }
 
     public int getSet() {
-        return set;
+        return setNumber;
     }    
     
 }

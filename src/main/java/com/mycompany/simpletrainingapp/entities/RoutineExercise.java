@@ -8,6 +8,9 @@ import com.mycompany.simpletrainingapp.embeddable.RepRange;
 import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Check;
 
 /**
@@ -24,6 +27,8 @@ public class RoutineExercise {
     private int expectedWeight;
     @Check(name = "validExpectedSets", constraints = "expectedSets > 0")
     private int expectedSets;
+    @OneToMany(mappedBy = "id.routineExercise")
+    private final Set<SetRecord> sets = new HashSet<>();
 
     public RoutineExercise() {}
 
@@ -66,6 +71,18 @@ public class RoutineExercise {
 
     public void setExpectedSets(int expectedSets) {
         this.expectedSets = expectedSets;
+    }
+    
+    public Set<SetRecord> getSets() {
+        return Set.copyOf(sets);
+    }
+    
+    public boolean addSet(SetRecord set){
+        return this.sets.add(set);
+    }
+    
+    public boolean removeSet(SetRecord set){
+        return this.sets.remove(set);
     }
 
 }

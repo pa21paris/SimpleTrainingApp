@@ -6,7 +6,12 @@ package com.mycompany.simpletrainingapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +24,12 @@ public class Muscle {
     
     @Id @Column(length = 60)
     private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
     private MuscleGroup muscleGroup;
+    @OneToMany(mappedBy = "targetMuscle")
     private final Set<Exercise> targetedExercises = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "SynergistMuscleExercise")
     private final Set<Exercise> synergistExercises = new HashSet<>();
     
     private Muscle(){}

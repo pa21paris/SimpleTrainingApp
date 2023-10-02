@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public class DayRoutine {
     @Column(unique = true, length = 60)
     private String name;
     
-    
+    @OneToMany(mappedBy = "id.routine")
     private Set<RoutineExercise> exercises = new HashSet<>();
 
     public DayRoutine(String name) {
