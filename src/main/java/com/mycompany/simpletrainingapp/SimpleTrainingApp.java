@@ -4,9 +4,8 @@
 
 package com.mycompany.simpletrainingapp;
 
-import jakarta.persistence.EntityManager;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import com.mycompany.simpletrainingapp.entities.MuscleGroup;
+import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
 
 /**
  *
@@ -14,9 +13,9 @@ import org.hibernate.cfg.Configuration;
  */
 public class SimpleTrainingApp {
     public static void main(String[] args) {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        EntityManager em = sessionFactory.createEntityManager();
-        em.close();
-        sessionFactory.close();
+        MuscleGroupRepository mgr = new MuscleGroupRepository();
+        MuscleGroup muscleGroup = mgr.getMuscleGroups().get(0);
+        muscleGroup.getMuscles().forEach(muscle -> System.out.println(muscle.getName()));
+        
     }
 }

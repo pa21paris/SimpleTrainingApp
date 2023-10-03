@@ -6,7 +6,6 @@ package com.mycompany.simpletrainingapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -24,7 +23,7 @@ public class Muscle {
     
     @Id @Column(length = 60)
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private MuscleGroup muscleGroup;
     @OneToMany(mappedBy = "targetMuscle")
     private final Set<Exercise> targetedExercises = new HashSet<>();

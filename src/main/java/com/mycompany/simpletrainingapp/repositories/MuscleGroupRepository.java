@@ -5,8 +5,7 @@
 package com.mycompany.simpletrainingapp.repositories;
 
 import com.mycompany.simpletrainingapp.entities.MuscleGroup;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.hibernate.Session;
 
 /**
@@ -25,13 +24,12 @@ public class MuscleGroupRepository {
         return muscleGroup;
     }
     
-    public Set<MuscleGroup> getMuscleGroups(){
-        Set<MuscleGroup> res;
+    public List<MuscleGroup> getMuscleGroups(){
+        List<MuscleGroup> res;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            var queryResults = session
+            res = session
                     .createSelectionQuery("from MuscleGroup", MuscleGroup.class)
                     .getResultList();
-            res = new HashSet<>(queryResults);
         }
         return res;
     }

@@ -40,6 +40,8 @@ public class Exercise {
     private final Set<Exercise> variations = new HashSet<>();
     @OneToMany(mappedBy = "id.exercise")
     private final Set<RoutineExercise> routines = new HashSet<>();
+    @OneToMany(mappedBy = "id.exercise")
+    private final Set<SetRecord> setHistory = new HashSet<>();
 
     public Exercise() {}    
 
@@ -116,6 +118,18 @@ public class Exercise {
     
     public boolean removeRoutine(RoutineExercise routine) {
         return this.routines.remove(routine);
+    }
+    
+    public Set<SetRecord> getSets() {
+        return Set.copyOf(setHistory);
+    }
+
+    public boolean addSet(SetRecord set) {
+        return this.setHistory.add(set);
+    }
+    
+    public boolean removeSet(SetRecord set) {
+        return this.setHistory.remove(set);
     }
         
 }
