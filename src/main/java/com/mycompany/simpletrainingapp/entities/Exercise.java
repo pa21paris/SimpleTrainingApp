@@ -4,6 +4,7 @@
  */
 package com.mycompany.simpletrainingapp.entities;
 
+import com.mycompany.simpletrainingapp.embeddable.SetRecordId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,10 +15,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -114,11 +115,8 @@ public class Exercise {
         return this.synergistMuscles.remove(synergistMuscle);
     }
     
-    public Set<Routine> getRoutines() {
-        return this.routines
-                .stream()
-                .map(routineExercise -> routineExercise.getRoutine())
-                .collect(Collectors.toSet());
+    public Set<RoutineExercise> getRoutines() {
+        return Set.copyOf(this.routines);
     }
 
     boolean addRoutine(RoutineExercise routine) {
@@ -133,8 +131,10 @@ public class Exercise {
         return Set.copyOf(setHistory);
     }
 
-    public boolean addSet(SetRecord set) {
-        return this.setHistory.add(set);
+    public boolean addSet(LocalDate date, int set, int weightUsed, int repsDone) {
+        var setRecordId = new SetRecordId(this, date, set);
+        var setRecord = new SetRecord(setRecordId, weightUsed, repsDone);
+        return this.setHistory.add(setRecord);
     }
     
     public boolean removeSet(SetRecord set) {

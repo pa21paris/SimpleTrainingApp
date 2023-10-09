@@ -17,7 +17,6 @@ import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -51,13 +50,10 @@ public class Routine {
         this.name = name;
     }
 
-    public Set<Exercise> getExercises() {
-        return this.exercises
-                .stream()
-                .map(routineExercise -> routineExercise.getExercise())
-                .collect(Collectors.toSet());
+    public Set<RoutineExercise> getExercises() {
+        return Set.copyOf(this.exercises);
     }
-
+        
     public boolean addExercise(
             Exercise exercise, RepRange repRange, int weight, int sets, DayOfWeek day
     ) {

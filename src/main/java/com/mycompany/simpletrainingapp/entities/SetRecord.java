@@ -25,7 +25,7 @@ public class SetRecord {
 
     SetRecord() {}    
 
-    public SetRecord(SetRecordId id, int weightUsed, int repsDone) {
+    SetRecord(SetRecordId id, int weightUsed, int repsDone) {
         this.id = id;
         this.weightUsed = weightUsed;
         this.repsDone = repsDone;
