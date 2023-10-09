@@ -4,6 +4,7 @@
  */
 package com.mycompany.simpletrainingapp.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class MuscleGroup {
     
     @Id @Column(length = 60)
     private String name;
-    @OneToMany(mappedBy = "muscleGroup")
+    @OneToMany(mappedBy = "muscleGroup", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private final Set<Muscle> muscles = new HashSet<>();
     
     MuscleGroup(){}

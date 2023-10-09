@@ -5,6 +5,7 @@
 package com.mycompany.simpletrainingapp.entities;
 
 import com.mycompany.simpletrainingapp.embeddable.SetRecordId;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,9 +43,9 @@ public class Exercise {
     @ManyToMany
     @JoinTable(name = "ExercisesVariations")
     private final Set<Exercise> variations = new HashSet<>();
-    @OneToMany(mappedBy = "id.exercise")
+    @OneToMany(mappedBy = "id.exercise", cascade = {CascadeType.REMOVE})
     private final Set<RoutineExercise> routines = new HashSet<>();
-    @OneToMany(mappedBy = "id.exercise")
+    @OneToMany(mappedBy = "id.exercise", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private final Set<SetRecord> setHistory = new HashSet<>();
 
     Exercise() {}    

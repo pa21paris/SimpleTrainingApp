@@ -6,6 +6,7 @@ package com.mycompany.simpletrainingapp.entities;
 
 import com.mycompany.simpletrainingapp.embeddable.RepRange;
 import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +33,7 @@ public class Routine {
     @Column(unique = true, length = 60)
     private String name;
 
-    @OneToMany(mappedBy = "id.routine", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "id.routine", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private Set<RoutineExercise> exercises = new HashSet<>();
 
     Routine() {
