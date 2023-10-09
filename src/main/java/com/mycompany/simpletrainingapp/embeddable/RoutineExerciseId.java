@@ -21,9 +21,9 @@ import java.util.Objects;
 @Embeddable
 public class RoutineExerciseId {
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Routine routine;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Exercise exercise;
     @Enumerated
     @Basic(optional = false)

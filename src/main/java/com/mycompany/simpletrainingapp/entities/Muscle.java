@@ -23,9 +23,13 @@ public class Muscle {
     
     @Id @Column(length = 60)
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private MuscleGroup muscleGroup;
-    @OneToMany(mappedBy = "targetMuscle", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = "targetMuscle", 
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+            orphanRemoval = true
+    )
     private final Set<Exercise> targetedExercises = new HashSet<>();
     
     Muscle(){}

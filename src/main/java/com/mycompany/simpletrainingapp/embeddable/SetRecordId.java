@@ -5,6 +5,7 @@
 package com.mycompany.simpletrainingapp.embeddable;
 
 import com.mycompany.simpletrainingapp.entities.Exercise;
+import jakarta.persistence.Basic;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -19,10 +20,12 @@ import org.hibernate.annotations.Check;
 @Embeddable
 public class SetRecordId {
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Exercise exercise;
+    @Basic(optional = false)
     private LocalDate setDate;
     @Check(name = "validSetNumber", constraints = "setNumber > 0")
+    @Basic(optional = false)
     private int setNumber;
 
     SetRecordId() {}

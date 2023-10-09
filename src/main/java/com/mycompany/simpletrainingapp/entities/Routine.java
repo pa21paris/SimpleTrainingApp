@@ -9,7 +9,6 @@ import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,10 +29,14 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true, length = 60)
+    @Column(unique = true, length = 60, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "id.routine", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = "id.routine", 
+            cascade = {CascadeType.REMOVE}, 
+            orphanRemoval = true
+    )
     private Set<RoutineExercise> exercises = new HashSet<>();
 
     Routine() {
@@ -69,7 +72,7 @@ public class Routine {
         
     }
 
-    public boolean removeExerciseOfDay(Exercise exercise, DayOfWeek day) {
+    public boolean removeExercise(Exercise exercise, DayOfWeek day) {
         var routineExercise = new RoutineExercise(new RoutineExerciseId(this, exercise, day));
         return this.exercises.remove(routineExercise) 
                 && exercise.removeRoutine(routineExercise);

@@ -31,11 +31,11 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true, length = 60)
+    @Column(unique = true, length = 60, nullable = false)
     private String name;
     private String instructions;
     private String videoLink;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Muscle targetMuscle;
     @ManyToMany
     @JoinTable(name = "SynergistMuscleExercise")
@@ -45,7 +45,11 @@ public class Exercise {
     private final Set<Exercise> variations = new HashSet<>();
     @OneToMany(mappedBy = "id.exercise", cascade = {CascadeType.REMOVE})
     private final Set<RoutineExercise> routines = new HashSet<>();
-    @OneToMany(mappedBy = "id.exercise", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = "id.exercise", 
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+            orphanRemoval = true
+    )
     private final Set<SetRecord> setHistory = new HashSet<>();
 
     Exercise() {}    

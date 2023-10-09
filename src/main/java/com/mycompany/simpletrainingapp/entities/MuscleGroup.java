@@ -22,7 +22,11 @@ public class MuscleGroup {
     
     @Id @Column(length = 60)
     private String name;
-    @OneToMany(mappedBy = "muscleGroup", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = "muscleGroup", 
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+            orphanRemoval = true
+    )
     private final Set<Muscle> muscles = new HashSet<>();
     
     MuscleGroup(){}
