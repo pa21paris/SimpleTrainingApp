@@ -15,7 +15,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -34,6 +36,7 @@ public class Exercise {
     @ManyToOne(fetch = FetchType.LAZY)
     private Muscle targetMuscle;
     @ManyToMany
+    @JoinTable(name = "SynergistMuscleExercise")
     private final Set<Muscle> synergistMuscles = new HashSet<>();
     @ManyToMany
     @JoinTable(name = "ExercisesVariations")
@@ -43,13 +46,12 @@ public class Exercise {
     @OneToMany(mappedBy = "id.exercise")
     private final Set<SetRecord> setHistory = new HashSet<>();
 
-    public Exercise() {}    
+    Exercise() {}    
 
-    public Exercise(String name, String instructions, String videoLink, Muscle targetMuscle) {
+    public Exercise(String name, String instructions, String videoLink) {
         this.name = name;
         this.instructions = instructions;
         this.videoLink = videoLink;
-        this.targetMuscle = targetMuscle;
     }
 
     public String getName() {
@@ -81,18 +83,22 @@ public class Exercise {
     }
 
     public boolean addVariation(Exercise variation) {
-        return this.variations.add(variation);
+        if(!this.variations.add(variation)) return false;
+        variation.addVariation(this);
+        return true;
     }
     
     public boolean removeVariation(Exercise variation) {
-        return this.variations.remove(variation);
+        if(!this.variations.remove(variation)) return false;
+        variation.removeVariation(this);
+        return true;
     }
 
     public Muscle getTargetMuscle() {
         return targetMuscle;
     }
 
-    public void setTargetMuscle(Muscle targetMuscle) {
+    void setTargetMuscle(Muscle targetMuscle) {
         this.targetMuscle = targetMuscle;
     }
 
@@ -108,15 +114,18 @@ public class Exercise {
         return this.synergistMuscles.remove(synergistMuscle);
     }
     
-    public Set<RoutineExercise> getRoutines() {
-        return Set.copyOf(routines);
+    public Set<Routine> getRoutines() {
+        return this.routines
+                .stream()
+                .map(routineExercise -> routineExercise.getRoutine())
+                .collect(Collectors.toSet());
     }
 
-    public boolean addRoutine(RoutineExercise routine) {
+    boolean addRoutine(RoutineExercise routine) {
         return this.routines.add(routine);
     }
     
-    public boolean removeRoutine(RoutineExercise routine) {
+    boolean removeRoutine(RoutineExercise routine) {
         return this.routines.remove(routine);
     }
     
@@ -131,5 +140,29 @@ public class Exercise {
     public boolean removeSet(SetRecord set) {
         return this.setHistory.remove(set);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Exercise other = (Exercise) obj;
+        return Objects.equals(this.name, other.name);
+    }
+    
+    
         
 }

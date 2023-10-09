@@ -8,9 +8,7 @@ import com.mycompany.simpletrainingapp.embeddable.RepRange;
 import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 import org.hibernate.annotations.Check;
 
 /**
@@ -27,12 +25,10 @@ public class RoutineExercise {
     private int expectedWeight;
     @Check(name = "validExpectedSets", constraints = "expectedSets > 0")
     private int expectedSets;
-    @OneToMany(mappedBy = "id.routineExercise")
-    private final Set<SetRecord> sets = new HashSet<>();
 
-    public RoutineExercise() {}
+    RoutineExercise() {}
 
-    public RoutineExercise(
+    RoutineExercise(
             RoutineExerciseId id, RepRange expectedRepRange, int expectedWeight, int expectedSets
     ) {
         this.id = id;
@@ -40,13 +36,17 @@ public class RoutineExercise {
         this.expectedWeight = expectedWeight;
         this.expectedSets = expectedSets;
     }
-
-    public DayRoutine getRoutine() {
-        return id.getRoutine();
-    }
     
+    RoutineExercise(RoutineExerciseId id) {
+        this.id = id;
+    }
+
     public Exercise getExercise() {
         return id.getExercise();
+    }
+
+    public Routine getRoutine() {
+        return id.getRoutine();
     }
 
     public RepRange getExpectedRepRange() {
@@ -72,17 +72,27 @@ public class RoutineExercise {
     public void setExpectedSets(int expectedSets) {
         this.expectedSets = expectedSets;
     }
-    
-    public Set<SetRecord> getSets() {
-        return Set.copyOf(sets);
-    }
-    
-    public boolean addSet(SetRecord set){
-        return this.sets.add(set);
-    }
-    
-    public boolean removeSet(SetRecord set){
-        return this.sets.remove(set);
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RoutineExercise other = (RoutineExercise) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
 }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.simpletrainingapp.repositories;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -13,12 +14,27 @@ import org.hibernate.cfg.Configuration;
  */
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
+    private static Session session;
     
     static {
         sessionFactory = new Configuration().configure().buildSessionFactory();
     }
     
-    protected static SessionFactory getSessionFactory(){
-        return sessionFactory;
+    public static boolean startActivity(){
+        if((session != null) && session.isOpen()) return false;
+        session = sessionFactory.openSession();
+        return true;
     }
+    
+    public static boolean endActivity(){
+        if(session == null) return false;
+        if(!session.isOpen()) return false;
+        session.close();
+        return true;
+    }
+    
+    protected static Session getSession(){
+        return session;
+    }
+    
 }

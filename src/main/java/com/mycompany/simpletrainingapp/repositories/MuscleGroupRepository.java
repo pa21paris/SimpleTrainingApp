@@ -7,46 +7,43 @@ package com.mycompany.simpletrainingapp.repositories;
 import com.mycompany.simpletrainingapp.entities.MuscleGroup;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author papar
  */
 public class MuscleGroupRepository {
-    
-    public MuscleGroup createMuscleGroup(String name){
+
+    public MuscleGroup createMuscleGroup(String name) throws ConstraintViolationException {
         MuscleGroup muscleGroup = new MuscleGroup(name);
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.persist(muscleGroup);
-            session.getTransaction().commit();
-        }
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        session.persist(muscleGroup);
+        session.getTransaction().commit();
         return muscleGroup;
     }
-    
-    public List<MuscleGroup> getMuscleGroups(){
+
+    public List<MuscleGroup> getMuscleGroups() {
         List<MuscleGroup> res;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            res = session
-                    .createSelectionQuery("from MuscleGroup", MuscleGroup.class)
-                    .getResultList();
-        }
+        Session session = HibernateUtil.getSession();
+        res = session
+                .createSelectionQuery("from MuscleGroup", MuscleGroup.class)
+                .getResultList();
         return res;
     }
-    
-    public MuscleGroup getMuscleGroupByName(String name){
+
+    public MuscleGroup getMuscleGroupByName(String name) {
         MuscleGroup queryResult;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            queryResult = session.find(MuscleGroup.class, name);
-        }
+        Session session = HibernateUtil.getSession();
+        queryResult = session.find(MuscleGroup.class, name);
         return queryResult;
     }
-    
-   public void deleteMuscleGroup(MuscleGroup muscleGroup){
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.remove(muscleGroup);
-            session.getTransaction().commit();
-        }
-   }
+
+    public void deleteMuscleGroup(MuscleGroup muscleGroup) {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        session.remove(muscleGroup);
+        session.getTransaction().commit();
+    }
 }

@@ -6,7 +6,6 @@ package com.mycompany.simpletrainingapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
@@ -22,10 +21,10 @@ public class MuscleGroup {
     
     @Id @Column(length = 60)
     private String name;
-    @OneToMany(mappedBy = "muscleGroup", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "muscleGroup")
     private final Set<Muscle> muscles = new HashSet<>();
     
-    private MuscleGroup(){}
+    MuscleGroup(){}
     
     public MuscleGroup(String name){
         this.name = name;
@@ -40,10 +39,12 @@ public class MuscleGroup {
     }
     
     public boolean addMuscle(Muscle muscle){
+        muscle.setMuscleGroup(this);
         return this.muscles.add(muscle);
     }
     
     public boolean removeMuscle(Muscle muscle){
+        muscle.setMuscleGroup(null);
         return this.muscles.remove(muscle);
     }
     

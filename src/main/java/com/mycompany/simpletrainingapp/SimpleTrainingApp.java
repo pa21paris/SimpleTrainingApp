@@ -5,6 +5,7 @@
 package com.mycompany.simpletrainingapp;
 
 import com.mycompany.simpletrainingapp.entities.MuscleGroup;
+import com.mycompany.simpletrainingapp.repositories.HibernateUtil;
 import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
 
 /**
@@ -13,9 +14,10 @@ import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
  */
 public class SimpleTrainingApp {
     public static void main(String[] args) {
+        HibernateUtil.startActivity();
         MuscleGroupRepository mgr = new MuscleGroupRepository();
-        MuscleGroup muscleGroup = mgr.getMuscleGroups().get(0);
-        muscleGroup.getMuscles().forEach(muscle -> System.out.println(muscle.getName()));
-        
+        MuscleGroup mg = mgr.getMuscleGroups().toArray(new MuscleGroup[0])[0];
+        MuscleGroup mg2 = mgr.getMuscleGroupByName(mg.getName());
+        HibernateUtil.endActivity();
     }
 }

@@ -7,6 +7,7 @@ package com.mycompany.simpletrainingapp.entities;
 import com.mycompany.simpletrainingapp.embeddable.SetRecordId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import java.util.Objects;
 import org.hibernate.annotations.Check;
 
 /**
@@ -22,7 +23,7 @@ public class SetRecord {
     private int weightUsed;
     private int repsDone;
 
-    public SetRecord() {}    
+    SetRecord() {}    
 
     public SetRecord(SetRecordId id, int weightUsed, int repsDone) {
         this.id = id;
@@ -41,5 +42,29 @@ public class SetRecord {
     public int getRepsDone() {
         return repsDone;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SetRecord other = (SetRecord) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
+    
     
 }

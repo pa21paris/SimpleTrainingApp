@@ -6,9 +6,8 @@ package com.mycompany.simpletrainingapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
@@ -23,19 +22,15 @@ public class Muscle {
     
     @Id @Column(length = 60)
     private String name;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MuscleGroup muscleGroup;
     @OneToMany(mappedBy = "targetMuscle")
     private final Set<Exercise> targetedExercises = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "SynergistMuscleExercise")
-    private final Set<Exercise> synergistExercises = new HashSet<>();
     
-    private Muscle(){}
+    Muscle(){}
     
-    public Muscle(String name, MuscleGroup muscleGroup){
+    public Muscle(String name){
         this.name = name;
-        this.muscleGroup = muscleGroup;
     }
 
     public String getName() {
@@ -46,7 +41,7 @@ public class Muscle {
         return muscleGroup;
     }
     
-    public void setMuscleGroup(MuscleGroup muscleGroup){
+    void setMuscleGroup(MuscleGroup muscleGroup){
         this.muscleGroup = muscleGroup;
     }
 
@@ -55,30 +50,13 @@ public class Muscle {
     }
     
     public boolean addTargetedExercise(Exercise exercise){
+        exercise.setTargetMuscle(this);
         return this.targetedExercises.add(exercise);
     }
     
     public boolean removeTargetedExercise(Exercise exercise){
+        exercise.setTargetMuscle(null);
         return this.targetedExercises.remove(exercise);
-    }
-    
-    public Set<Exercise> getSynergistExercises() {
-        return Set.copyOf(this.synergistExercises);
-    }
-    
-    public boolean addSynergistExercise(Exercise exercise){
-        return this.synergistExercises.add(exercise);
-    }
-    
-    public boolean removeSynergistExercise(Exercise exercise){
-        return this.synergistExercises.remove(exercise);
-    }
-    
-    public Set<Exercise> getAllExercises(){
-        var res = new HashSet<Exercise>();
-        res.addAll(this.getTargetedExercises());
-        res.addAll(this.getSynergistExercises());
-        return res;
     }
     
 }

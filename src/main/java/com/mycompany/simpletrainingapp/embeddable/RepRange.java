@@ -20,7 +20,7 @@ public class RepRange {
     
     private int maxReps;
 
-    public RepRange() {}    
+    RepRange() {}    
 
     public RepRange(int minReps, int maxReps) {
         this.minReps = minReps;
