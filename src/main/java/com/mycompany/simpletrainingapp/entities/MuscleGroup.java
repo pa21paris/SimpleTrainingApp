@@ -49,7 +49,6 @@ public class MuscleGroup {
     }
     
     public boolean removeMuscle(Muscle muscle){
-        muscle.setMuscleGroup(null);
         return this.muscles.remove(muscle);
     }
     

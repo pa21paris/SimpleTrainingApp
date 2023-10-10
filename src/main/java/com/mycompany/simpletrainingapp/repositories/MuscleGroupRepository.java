@@ -15,13 +15,11 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class MuscleGroupRepository {
 
-    public MuscleGroup createMuscleGroup(String name) throws ConstraintViolationException {
-        MuscleGroup muscleGroup = new MuscleGroup(name);
+    public void saveMuscleGroup(MuscleGroup muscleGroup) throws ConstraintViolationException {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         session.persist(muscleGroup);
         session.getTransaction().commit();
-        return muscleGroup;
     }
 
     public List<MuscleGroup> getMuscleGroups() {

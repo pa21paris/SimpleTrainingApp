@@ -4,9 +4,11 @@
 
 package com.mycompany.simpletrainingapp;
 
+import com.mycompany.simpletrainingapp.entities.Muscle;
 import com.mycompany.simpletrainingapp.entities.MuscleGroup;
 import com.mycompany.simpletrainingapp.repositories.HibernateUtil;
 import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
+import com.mycompany.simpletrainingapp.repositories.MuscleRepository;
 
 /**
  *
@@ -15,9 +17,14 @@ import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
 public class SimpleTrainingApp {
     public static void main(String[] args) {
         HibernateUtil.startActivity();
-        MuscleGroupRepository mgr = new MuscleGroupRepository();
-        MuscleGroup mg = mgr.getMuscleGroups().toArray(new MuscleGroup[0])[0];
-        MuscleGroup mg2 = mgr.getMuscleGroupByName(mg.getName());
+        var muscle = new Muscle("Pepe");
+        var muscleGroup = new MuscleGroup("PepeGroup");
+        muscleGroup.addMuscle(muscle);
+        var mgr = new MuscleGroupRepository();
+        mgr.saveMuscleGroup(muscleGroup);
+        muscleGroup.removeMuscle(muscle);
+        var mr = new MuscleRepository();
+        mr.deleteMuscle(muscle);
         HibernateUtil.endActivity();
     }
 }

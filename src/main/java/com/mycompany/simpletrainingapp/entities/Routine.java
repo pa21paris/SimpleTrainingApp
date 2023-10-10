@@ -34,7 +34,7 @@ public class Routine {
 
     @OneToMany(
             mappedBy = "id.routine", 
-            cascade = {CascadeType.REMOVE}, 
+            cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, 
             orphanRemoval = true
     )
     private Set<RoutineExercise> exercises = new HashSet<>();

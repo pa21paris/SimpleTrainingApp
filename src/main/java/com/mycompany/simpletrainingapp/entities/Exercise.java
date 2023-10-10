@@ -40,7 +40,7 @@ public class Exercise {
     @ManyToMany
     @JoinTable(name = "SynergistMuscleExercise")
     private final Set<Muscle> synergistMuscles = new HashSet<>();
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "ExercisesVariations")
     private final Set<Exercise> variations = new HashSet<>();
     @OneToMany(mappedBy = "id.exercise", cascade = {CascadeType.REMOVE})
