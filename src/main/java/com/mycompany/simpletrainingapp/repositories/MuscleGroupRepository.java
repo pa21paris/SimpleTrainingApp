@@ -14,32 +14,31 @@ import org.hibernate.exception.ConstraintViolationException;
  * @author papar
  */
 public class MuscleGroupRepository {
+    
+    private Session session;
+    
+    public MuscleGroupRepository(){
+        session = HibernateUtil.getSession();
+    }
 
     public void saveMuscleGroup(MuscleGroup muscleGroup) throws ConstraintViolationException {
-        Session session = HibernateUtil.getSession();
         session.beginTransaction();
         session.persist(muscleGroup);
         session.getTransaction().commit();
     }
 
     public List<MuscleGroup> getMuscleGroups() {
-        List<MuscleGroup> res;
-        Session session = HibernateUtil.getSession();
-        res = session
+        var res = session
                 .createSelectionQuery("from MuscleGroup", MuscleGroup.class)
                 .getResultList();
         return res;
     }
 
     public MuscleGroup getMuscleGroupByName(String name) {
-        MuscleGroup queryResult;
-        Session session = HibernateUtil.getSession();
-        queryResult = session.find(MuscleGroup.class, name);
-        return queryResult;
+        return session.find(MuscleGroup.class, name);
     }
 
     public void deleteMuscleGroup(MuscleGroup muscleGroup) {
-        Session session = HibernateUtil.getSession();
         session.beginTransaction();
         session.remove(muscleGroup);
         session.getTransaction().commit();

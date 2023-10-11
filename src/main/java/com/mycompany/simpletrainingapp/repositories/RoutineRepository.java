@@ -4,7 +4,7 @@
  */
 package com.mycompany.simpletrainingapp.repositories;
 
-import com.mycompany.simpletrainingapp.entities.Exercise;
+import com.mycompany.simpletrainingapp.entities.Routine;
 import java.util.List;
 import org.hibernate.Session;
 
@@ -12,36 +12,37 @@ import org.hibernate.Session;
  *
  * @author papar
  */
-public class ExerciseRepository {
+public class RoutineRepository {
     
     private Session session;
     
-    public ExerciseRepository(){
+        
+    public RoutineRepository(){
         session = HibernateUtil.getSession();
     }
     
-    public void saveExercise(Exercise exercise){
+    public void saveRoutine(Routine routine){
         session.beginTransaction();
-        session.persist(exercise);
+        session.persist(routine);
         session.getTransaction().commit();
     }
     
-    public List<Exercise> getExercises(){
+    public List<Routine> getRoutines(){
         return session
-                .createSelectionQuery("from Exercise", Exercise.class)
+                .createSelectionQuery("from Routine", Routine.class)
                 .getResultList();
     }
     
-    public Exercise getExerciseByName(String name){
+    public Routine getRoutineByName(String name){
         return session
-                .createQuery("from Exercise where name = :nameValue", Exercise.class)
+                .createQuery("from Routine where name = :nameValue", Routine.class)
                 .setParameter("nameValue", name)
                 .getSingleResultOrNull();
     }
     
-    public void deleteExercise(Exercise exercise){
+    public void deleteRoutine(Routine routine){
         session.beginTransaction();
-        session.remove(exercise);
+        session.remove(routine);
         session.getTransaction().commit();
     }
     
