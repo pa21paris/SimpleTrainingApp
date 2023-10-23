@@ -8,6 +8,7 @@ import com.mycompany.simpletrainingapp.embeddable.RepRange;
 import com.mycompany.simpletrainingapp.embeddable.RoutineExerciseId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import java.time.DayOfWeek;
 import java.util.Objects;
 import org.hibernate.annotations.Check;
 
@@ -47,6 +48,10 @@ public class RoutineExercise {
 
     public Routine getRoutine() {
         return id.getRoutine();
+    }
+    
+    public DayOfWeek getDay() {
+        return id.getDayOfWeek();
     }
 
     public RepRange getExpectedRepRange() {

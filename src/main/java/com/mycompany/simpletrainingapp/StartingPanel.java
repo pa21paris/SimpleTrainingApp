@@ -82,7 +82,9 @@ public class StartingPanel extends javax.swing.JPanel {
         var parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         var contentPane = parent.getContentPane();
         var cardLayout = (CardLayout) contentPane.getLayout();
-        contentPane.add(new RoutinesPanel());
+        var routinesPanel = new RoutinesPanel();
+        contentPane.add(routinesPanel);
+        routinesPanel.loadData();
         cardLayout.next(contentPane);
         parent.pack();
     }//GEN-LAST:event_jButton3ActionPerformed

@@ -34,5 +34,12 @@ public class RepRange {
     public int getMaxReps() {
         return maxReps;
     }
+
+    @Override
+    public String toString() {
+        return minReps + " - " + maxReps;
+    }
+    
+    
     
 }
