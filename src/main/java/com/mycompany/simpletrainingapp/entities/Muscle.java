@@ -63,5 +63,10 @@ public class Muscle {
         exercise.setTargetMuscle(null);
         return this.targetedExercises.remove(exercise);
     }
+
+    @Override
+    public String toString() {
+        return "Muscle{" + "name=" + name + '}';
+    }
     
 }

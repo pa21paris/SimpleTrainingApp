@@ -6,7 +6,6 @@ package com.mycompany.simpletrainingapp;
 
 import com.mycompany.simpletrainingapp.entities.Routine;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.time.DayOfWeek;
 import javax.swing.JFrame;
@@ -124,7 +123,8 @@ public class RoutinePanel extends javax.swing.JPanel {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         var rootFrame = (JFrame) SwingUtilities.getRoot(this);
-        var addExerciseWindow = new RoutineExerciseWindow(routine, rootFrame);
+        var selectedDay = DayOfWeek.of(jComboBox1.getSelectedIndex()+1);
+        var addExerciseWindow = new RoutineExerciseWindow(routine, selectedDay, rootFrame, this);
         addExerciseWindow.setVisible(true);
         rootFrame.setEnabled(false);        
     }//GEN-LAST:event_addButtonActionPerformed
@@ -133,7 +133,6 @@ public class RoutinePanel extends javax.swing.JPanel {
         scrollPanel.removeAll();
         var routineExercises = routine.getExercises();
         routineExercises.forEach(re ->{
-            System.out.println(re.getDay().toString());
             if(re.getDay() == day) scrollPanel.add(new RoutineExerciseComponent(re));
         });
         scrollPanel.setPreferredSize(
@@ -141,6 +140,10 @@ public class RoutinePanel extends javax.swing.JPanel {
         );
         scrollPanel.validate();
         scrollPanel.repaint();
+    }
+    
+    public void refresh(){
+        this.loadDay(currentDay);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

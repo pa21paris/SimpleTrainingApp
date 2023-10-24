@@ -77,7 +77,10 @@ public class MuscleGroup {
         final MuscleGroup other = (MuscleGroup) obj;
         return Objects.equals(this.name, other.name);
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "MuscleGroup{" + "name=" + name + '}';
+    }
     
 }

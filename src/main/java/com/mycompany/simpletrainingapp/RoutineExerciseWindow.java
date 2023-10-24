@@ -4,11 +4,15 @@
  */
 package com.mycompany.simpletrainingapp;
 
+import com.mycompany.simpletrainingapp.embeddable.RepRange;
+import com.mycompany.simpletrainingapp.entities.Exercise;
 import com.mycompany.simpletrainingapp.entities.Muscle;
 import com.mycompany.simpletrainingapp.entities.MuscleGroup;
 import com.mycompany.simpletrainingapp.entities.Routine;
 import com.mycompany.simpletrainingapp.repositories.MuscleGroupRepository;
+import com.mycompany.simpletrainingapp.repositories.RoutineRepository;
 import java.awt.event.ItemEvent;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JFrame;
@@ -21,17 +25,26 @@ public class RoutineExerciseWindow extends javax.swing.JFrame {
     
     private Routine routine;
     private JFrame parent;
+    private RoutinePanel parentPanel;
     private List<MuscleGroup> muscleGroups;
     private Set<Muscle> muscles;
     private MuscleGroup selectedMuscleGroup;
+    private Muscle selectedMuscle;
+    private DayOfWeek selectedDay;
 
     /**
      * Creates new form RoutineExerciseWindow
      * @param routine
+     * @param selectedDay
+     * @param parent
      */
-    public RoutineExerciseWindow(Routine routine, JFrame parent) {
+    public RoutineExerciseWindow(Routine routine, DayOfWeek selectedDay, JFrame parent, RoutinePanel parentPanel) {
+        this.parentPanel = parentPanel;
+        this.selectedDay = selectedDay;
         this.parent = parent;
         this.routine = routine;
+        this.selectedMuscle = null;
+        this.selectedMuscleGroup = null;
         initComponents();
         loadMuscleGroups();
     }
@@ -55,19 +68,22 @@ public class RoutineExerciseWindow extends javax.swing.JFrame {
     }
     
     private void loadMuscleGroupExercises(String name){
+        this.selectedMuscle = null;
         this.selectedMuscleGroup
                 .getTargetedExercises()
                 .forEach(e -> exercisesCombo.addItem(e.getName()));
     }
     
     private void loadTargetMuscleData(String name){
-        var muscle = 
+        this.selectedMuscle = 
                 muscles
                     .stream()
                     .filter(m -> m.getName().equals(name))
                     .findAny()
                     .get();
-        muscle.getTargetedExercises().forEach(e -> exercisesCombo.addItem(e.getName()));
+        this.selectedMuscle
+                .getTargetedExercises()
+                .forEach(e -> exercisesCombo.addItem(e.getName()));
     }
 
     /**
@@ -137,11 +153,21 @@ public class RoutineExerciseWindow extends javax.swing.JFrame {
         cancelButton.setForeground(new java.awt.Color(0, 137, 173));
         cancelButton.setText("Cancel");
         cancelButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 1, true));
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         addButton.setBackground(new java.awt.Color(45, 45, 255));
         addButton.setForeground(new java.awt.Color(232, 232, 232));
         addButton.setText("Add");
         addButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 1, true));
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -231,6 +257,41 @@ public class RoutineExerciseWindow extends javax.swing.JFrame {
         targetMusclesCombo.removeAllItems();
         loadMuscleGroupMuscles(selectedMuscleGroupName);
     }//GEN-LAST:event_muscleGroupsComboItemStateChanged
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.parent.setEnabled(true);
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        var selectedExerciseName = (String) exercisesCombo.getSelectedItem();
+        if(selectedExerciseName == null) return;
+        Set<Exercise> exercises;
+        if(selectedMuscle != null) exercises = selectedMuscle.getTargetedExercises();
+        else exercises = selectedMuscleGroup.getTargetedExercises();
+        Exercise selectedExercise = 
+                exercises
+                    .stream()
+                    .filter(m -> m.getName().equals(selectedExerciseName))
+                    .findAny()
+                    .get();
+        var numberOfSets = (int) setsNumberSpinner.getValue();
+        var minReps = (int) minRepRangeSpinner.getValue();
+        var maxReps = (int) maxRepRangeSpinner.getValue();
+        var repRange = new RepRange(minReps, maxReps);
+        routine.addExercise(
+                selectedExercise, 
+                repRange, 
+                1, 
+                numberOfSets, 
+                this.selectedDay
+        );
+        var routineRepository = new RoutineRepository();
+        routineRepository.saveRoutine(routine);
+        this.parentPanel.refresh();
+        this.parent.setEnabled(true);
+        this.dispose();
+    }//GEN-LAST:event_addButtonActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;

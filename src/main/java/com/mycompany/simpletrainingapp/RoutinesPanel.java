@@ -9,6 +9,9 @@ import com.mycompany.simpletrainingapp.repositories.HibernateUtil;
 import com.mycompany.simpletrainingapp.repositories.RoutineRepository;
 import java.awt.Dimension;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -21,6 +24,22 @@ public class RoutinesPanel extends javax.swing.JPanel {
      */
     public RoutinesPanel() {
         initComponents();
+        this.searchTextField
+                .getDocument()
+                .addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        loadDataFromSearch();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        loadDataFromSearch();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {}
+                });
     }
 
     /**
@@ -33,7 +52,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        searchTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         scrollPanel = new javax.swing.JPanel();
@@ -64,7 +83,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -75,7 +94,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                        .addComponent(searchTextField)
                         .addGap(13, 13, 13))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,9 +107,32 @@ public class RoutinesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        String routineName = JOptionPane.showInputDialog("Type routine's name:");
+        var routine = new Routine(routineName);
+        var routineRepository = new RoutineRepository();
+        routineRepository.saveRoutine(routine);
+        loadDataFromSearch();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void loadDataFromSearch(){
+        var routineRepository = new RoutineRepository();
+        var searchText = this.searchTextField.getText();
+        List<Routine> routines;
+        if(searchText.isBlank()) routines = routineRepository.getRoutines();
+        else routines = routineRepository.getRoutinesByName(this.searchTextField.getText());
+        scrollPanel.removeAll();
+        scrollPanel.setPreferredSize(new Dimension(jScrollPane1.getWidth(), 0));
+        routines.forEach(routine -> scrollPanel.add(new RoutineButton(routine)));
+        routines.forEach(r -> System.out.println(r));
+        if(!routines.isEmpty()) 
+            scrollPanel
+                    .setPreferredSize(
+                            new Dimension(jScrollPane1.getWidth(), routines.size()*100)
+                    );
+        scrollPanel.revalidate();
+        scrollPanel.repaint();
+    }
+    
     public void loadData(){
         HibernateUtil.startActivity();
         var routineRepository = new RoutineRepository();
@@ -107,7 +149,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel scrollPanel;
+    private javax.swing.JTextField searchTextField;
     // End of variables declaration//GEN-END:variables
 }

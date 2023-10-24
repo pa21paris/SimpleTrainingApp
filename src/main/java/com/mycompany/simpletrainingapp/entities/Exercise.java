@@ -167,7 +167,10 @@ public class Exercise {
         final Exercise other = (Exercise) obj;
         return Objects.equals(this.name, other.name);
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Exercise{" + "name=" + name + '}';
+    }
         
 }

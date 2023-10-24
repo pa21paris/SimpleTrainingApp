@@ -33,11 +33,11 @@ public class RoutineRepository {
                 .getResultList();
     }
     
-    public Routine getRoutineByName(String name){
+    public List<Routine> getRoutinesByName(String name){
         return session
-                .createQuery("from Routine where name = :nameValue", Routine.class)
-                .setParameter("nameValue", name)
-                .getSingleResultOrNull();
+                .createQuery("from Routine where upper(name) like upper(:nameValue)", Routine.class)
+                .setParameter("nameValue", "%"+name+"%")
+                .getResultList();
     }
     
     public void deleteRoutine(Routine routine){

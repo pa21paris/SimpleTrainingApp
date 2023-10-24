@@ -6,7 +6,6 @@ package com.mycompany.simpletrainingapp;
 
 import com.mycompany.simpletrainingapp.entities.Exercise;
 import com.mycompany.simpletrainingapp.entities.RoutineExercise;
-import java.time.LocalDate;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
